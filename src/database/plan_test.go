@@ -1,27 +1,11 @@
 package database
 
 import (
-	"context"
 	"testing"
 	"time"
 
 	"github.com/google/uuid"
 )
-
-func createDbForPlanTests(t *testing.T) (context.Context, *DB) {
-	if testing.Short() {
-		t.Skip("Skipping integration test")
-	}
-	ctx := context.Background()
-
-	// Create database connection
-	db, err := NewDb(ctx)
-	if err != nil {
-		t.Fatalf("Failed to connect to database: %v", err)
-	}
-
-	return ctx, db
-}
 
 func TestCreatePlan(t *testing.T) {
 	ctx, db := createDbForPlanTests(t)

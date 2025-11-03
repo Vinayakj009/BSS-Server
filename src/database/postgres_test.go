@@ -9,24 +9,24 @@ import (
 	"github.com/google/uuid"
 )
 
-// TestPostgresIntegration tests the PostgreSQL connection and basic operations
-func TestPostgresIntegration(t *testing.T) {
-	// Skip if not running integration tests
+func createDbForPlanTests(t *testing.T) (context.Context, *DB) {
 	if testing.Short() {
 		t.Skip("Skipping integration test")
 	}
-
 	ctx := context.Background()
 
-	// Load config from environment
-	config := loadConfigFromEnv()
-
 	// Create database connection
-	db, err := NewDB(ctx, config)
+	db, err := NewDb(ctx)
 	if err != nil {
 		t.Fatalf("Failed to connect to database: %v", err)
 	}
-	defer db.Close()
+
+	return ctx, db
+}
+
+// TestPostgresIntegration tests the PostgreSQL connection and basic operations
+func TestPostgresIntegration(t *testing.T) {
+	ctx, db := createDbForPlanTests(t)
 
 	// Test ping
 	if err := db.Ping(ctx); err != nil {
@@ -37,22 +37,7 @@ func TestPostgresIntegration(t *testing.T) {
 }
 
 func TestInitSchema(t *testing.T) {
-	// Skip if not running integration tests
-	if testing.Short() {
-		t.Skip("Skipping integration test")
-	}
-
-	ctx := context.Background()
-
-	// Load config from environment
-	config := loadConfigFromEnv()
-
-	// Create database connection
-	db, err := NewDB(ctx, config)
-	if err != nil {
-		t.Fatalf("Failed to connect to database: %v", err)
-	}
-	defer db.Close()
+	ctx, db := createDbForPlanTests(t)
 
 	t.Log("Successfully initialized database schema")
 

@@ -39,6 +39,18 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 	updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
+-- Insert sample subscription
+INSERT INTO subscriptions (id, customer_id, plan_id, start_date, end_date, status, auto_renew)
+VALUES (
+    gen_random_uuid(),
+    '00000000-0000-0000-0000-000000000000',
+    '11111111-1111-1111-1111-111111111111',
+    NOW(),
+    NOW() + INTERVAL '30 days',
+    'ACTIVE',
+    true
+);
+
 -- Events table
 CREATE TABLE IF NOT EXISTS events (
 	id BIGSERIAL PRIMARY KEY,
