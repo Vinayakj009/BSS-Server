@@ -45,19 +45,26 @@ VALUES (
     gen_random_uuid(),
     '00000000-0000-0000-0000-000000000000',
     '11111111-1111-1111-1111-111111111111',
-    NOW(),
+    NOW() - INTERVAL '1 days',
     NOW() + INTERVAL '30 days',
     'ACTIVE',
     true
-);
--- Insert sample subscription
-INSERT INTO subscriptions (id, customer_id, plan_id, start_date, end_date, status, auto_renew)
-VALUES (
+),
+(
+    gen_random_uuid(),
+    '00000000-0000-0000-0000-000000000000',
+    '11111111-1111-1111-1111-111111111111',
+    NOW() - INTERVAL '30 days',
+    NOW() - INTERVAL '2 days',
+    'EXPIRED',
+    true
+),
+(
     gen_random_uuid(),
     '00000000-0000-0000-0000-000000000001',
     '11111111-1111-1111-1111-111111111111',
-    NOW(),
-    NOW() + INTERVAL '30 days',
+    NOW() - INTERVAL '32 days',
+    NOW() - INTERVAL '4 days',
     'EXPIRED',
     true
 );
