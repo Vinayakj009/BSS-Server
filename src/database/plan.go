@@ -74,7 +74,7 @@ func (db *DB) GetPlans(ctx context.Context, pageableRequest PageableRequest) (Pa
 	}, nil
 }
 
-func (db *DB) GetPlan(ctx context.Context, id uuid.UUID) (Plan, error) {
+func (db *DB) GetPlan(ctx context.Context, id string) (Plan, error) {
 	query := `SELECT * from plans WHERE id = $1`
 	row := db.Pool.QueryRow(ctx, query, id)
 	return db.scanPlan(ctx, row)

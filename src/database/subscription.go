@@ -90,13 +90,13 @@ func (db *DB) CreateSubscription(ctx context.Context, subscription Subscription)
 	return subscription, nil
 }
 
-func (db *DB) CancelSubscription(ctx context.Context, subscriptionId string) error {
+func (db *DB) CancelSubscription(ctx context.Context, subscriptionId string, customerId string) error {
 	query := `
 		UPDATE subscriptions
 		SET status = 'CANCELLED', updated_at = NOW()
-		WHERE id = $1 and status = 'ACTIVE'
+		WHERE id = $1 and status = 'ACTIVE' and customer_id = $2
 	`
-	result, err := db.Pool.Exec(ctx, query, subscriptionId)
+	result, err := db.Pool.Exec(ctx, query, subscriptionId, customerId)
 	if err != nil {
 		return err
 	}

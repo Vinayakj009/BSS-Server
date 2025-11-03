@@ -49,7 +49,7 @@ func TestGetPlan(t *testing.T) {
 	ctx, db := createDbForPlanTests(t)
 
 	// Replace with an existing plan ID in your test database
-	existingPlanID := uuid.MustParse("11111111-1111-1111-1111-111111111111")
+	existingPlanID := "11111111-1111-1111-1111-111111111111"
 	if plan, err := db.GetPlan(ctx, existingPlanID); err != nil {
 		t.Fatalf("Failed to get plan: %v", err)
 	} else {
@@ -61,7 +61,7 @@ func TestUpdatePlan(t *testing.T) {
 	ctx, db := createDbForPlanTests(t)
 	defer db.Close()
 	// Replace with an existing plan ID in your test database
-	existingPlanID := uuid.MustParse("11111111-1111-1111-1111-111111111111")
+	existingPlanID := "11111111-1111-1111-1111-111111111111"
 
 	// Fetch the existing plan
 	plan, err := db.GetPlan(ctx, existingPlanID)

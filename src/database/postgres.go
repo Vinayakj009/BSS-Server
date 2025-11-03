@@ -1,7 +1,6 @@
 package database
 
 import (
-	"bss/src/models"
 	"context"
 	"fmt"
 	"os"
@@ -9,12 +8,6 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
-
-type PageableRequest = models.PageableRequest
-type Page[V any] models.Page[V]
-type Plan = models.Plan
-type Subscription = models.Subscription
-type Event = models.Event
 
 // Config holds the database configuration
 type Config struct {
@@ -29,12 +22,12 @@ type Config struct {
 // loadConfigFromEnv loads database configuration from environment variables
 func loadConfigFromEnv() *Config {
 	return &Config{
-		Host:     getEnv("POSTGRES_HOST", "localhost"),
-		Port:     getEnv("POSTGRES_PORT", "5432"),
-		User:     getEnv("POSTGRES_USER", "postgres"),
-		Password: getEnv("POSTGRES_PASSWORD", "postgres"),
-		Database: getEnv("POSTGRES_DB", "bss"),
-		SSLMode:  getEnv("POSTGRES_SSLMODE", "disable"),
+		Host:     getEnv("DB_HOST", "localhost"),
+		Port:     getEnv("DB_PORT", "5432"),
+		User:     getEnv("DB_USER", "postgres"),
+		Password: getEnv("DB_PASSWORD", "postgres"),
+		Database: getEnv("DB_DB", "bss"),
+		SSLMode:  getEnv("DB_SSLMODE", "disable"),
 	}
 }
 

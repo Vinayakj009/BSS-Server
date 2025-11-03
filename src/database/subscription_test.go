@@ -88,7 +88,8 @@ func TestCancelSubscriptionBadSubId(t *testing.T) {
 	ctx, db := createDbForPlanTests(t)
 	defer db.Close()
 	subscriptionId := "00000000-0000-0000-0000-000000000010"
-	err := db.CancelSubscription(ctx, subscriptionId)
+	customerId := "00000000-0000-0000-0000-000000000000"
+	err := db.CancelSubscription(ctx, subscriptionId, customerId)
 	if err == nil {
 		t.Fatalf("Expected failure when canceling subscription with bad ID, but got success")
 	}
@@ -98,7 +99,8 @@ func TestCancelSubscription(t *testing.T) {
 	ctx, db := createDbForPlanTests(t)
 	defer db.Close()
 	subscriptionId := "22222222-2222-2222-2222-222222222222"
-	err := db.CancelSubscription(ctx, subscriptionId)
+	customerId := "00000000-0000-0000-0000-000000000000"
+	err := db.CancelSubscription(ctx, subscriptionId, customerId)
 	if err != nil {
 		t.Fatalf("Failed to cancel subscription: %v", err)
 	}
