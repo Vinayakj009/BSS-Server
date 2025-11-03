@@ -1,6 +1,7 @@
 package database
 
 import (
+	"bss/src/models"
 	"context"
 	"fmt"
 	"os"
@@ -8,6 +9,12 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
+
+type PageableRequest = models.PageableRequest
+type Page[V any] models.Page[V]
+type Plan = models.Plan
+type Subscription = models.Subscription
+type Event = models.Event
 
 // Config holds the database configuration
 type Config struct {
@@ -19,8 +26,8 @@ type Config struct {
 	SSLMode  string
 }
 
-// LoadConfigFromEnv loads database configuration from environment variables
-func LoadConfigFromEnv() *Config {
+// loadConfigFromEnv loads database configuration from environment variables
+func loadConfigFromEnv() *Config {
 	return &Config{
 		Host:     getEnv("POSTGRES_HOST", "localhost"),
 		Port:     getEnv("POSTGRES_PORT", "5432"),
@@ -42,6 +49,11 @@ func getEnv(key, defaultValue string) string {
 // DB wraps the pgxpool connection
 type DB struct {
 	Pool *pgxpool.Pool
+}
+
+func NewDb(ctx context.Context) (*DB, error) {
+	config := loadConfigFromEnv()
+	return NewDB(ctx, config)
 }
 
 // NewDB creates a new database connection pool

@@ -13,6 +13,19 @@ CREATE TABLE IF NOT EXISTS plans (
 	updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
+-- Insert sample plan
+INSERT INTO plans (id, code, name, price_cents, currency, duration_days, data_mb, active)
+VALUES (
+    '11111111-1111-1111-1111-111111111111',
+    'BASIC-MONTHLY',
+    'Basic Monthly Plan',
+    999,
+    'USD',
+    30,
+    5120,
+    true
+);
+
 -- Subscriptions table
 CREATE TABLE IF NOT EXISTS subscriptions (
 	id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

@@ -19,7 +19,7 @@ func TestPostgresIntegration(t *testing.T) {
 	ctx := context.Background()
 
 	// Load config from environment
-	config := LoadConfigFromEnv()
+	config := loadConfigFromEnv()
 
 	// Create database connection
 	db, err := NewDB(ctx, config)
@@ -45,7 +45,7 @@ func TestInitSchema(t *testing.T) {
 	ctx := context.Background()
 
 	// Load config from environment
-	config := LoadConfigFromEnv()
+	config := loadConfigFromEnv()
 
 	// Create database connection
 	db, err := NewDB(ctx, config)
@@ -55,27 +55,6 @@ func TestInitSchema(t *testing.T) {
 	defer db.Close()
 
 	t.Log("Successfully initialized database schema")
-
-	// Verify tables were created by inserting test data
-	t.Run("InsertPlan", func(t *testing.T) {
-		query := `
-			INSERT INTO plans (code, name, price_cents, currency, duration_days, data_mb)
-			VALUES ($1, $2, $3, $4, $5, $6)
-			RETURNING id
-		`
-		var planID uuid.UUID
-		err := db.Pool.QueryRow(ctx, query, "TEST-PLAN", "Test Plan", 999, "USD", 30, 1024).Scan(&planID)
-		if err != nil {
-			t.Fatalf("Failed to insert plan: %v", err)
-		}
-		t.Logf("Successfully inserted plan with ID: %s", planID)
-
-		// Clean up
-		_, err = db.Pool.Exec(ctx, "DELETE FROM plans WHERE id = $1", planID)
-		if err != nil {
-			t.Errorf("Failed to clean up test plan: %v", err)
-		}
-	})
 
 	t.Run("InsertSubscription", func(t *testing.T) {
 		// First create a plan
@@ -194,7 +173,7 @@ func TestLoadConfigFromEnv(t *testing.T) {
 				os.Setenv(k, v)
 			}
 
-			config := LoadConfigFromEnv()
+			config := loadConfigFromEnv()
 
 			if config.Host != tc.expected.Host {
 				t.Errorf("Expected Host=%s, got %s", tc.expected.Host, config.Host)
