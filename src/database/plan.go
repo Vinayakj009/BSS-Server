@@ -79,3 +79,22 @@ func (db *DB) GetPlan(ctx context.Context, id uuid.UUID) (Plan, error) {
 	row := db.Pool.QueryRow(ctx, query, id)
 	return db.scanPlan(ctx, row)
 }
+
+func (db *DB) UpdatePlan(ctx context.Context, plan Plan) (Plan, error) {
+	query := `UPDATE plans SET code = $1, name = $2, price_cents = $3, currency = $4, duration_days = $5, data_mb = $6, active = $7, updated_at = $8 WHERE id = $9`
+	_, err := db.Pool.Exec(ctx, query,
+		plan.Code,
+		plan.Name,
+		plan.PriceCents,
+		plan.Currency,
+		plan.DurationDays,
+		plan.DataMB,
+		plan.Active,
+		plan.UpdatedAt,
+		plan.ID,
+	)
+	if err != nil {
+		return Plan{}, err
+	}
+	return plan, nil
+}
