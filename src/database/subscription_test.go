@@ -2,6 +2,9 @@ package database
 
 import (
 	"testing"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 func TestGetSubscriptionsByUserId(t *testing.T) {
@@ -47,4 +50,36 @@ func TestGetActiveSubscriptionByUserId(t *testing.T) {
 		t.Fatalf("Expected no subscription found, but got: %v", nonExistingSubscription)
 	}
 	t.Logf("Successfully retrieved subscription: UserID=%s", existingUserID)
+}
+
+func TestCreateSubscription(t *testing.T) {
+	ctx, db := createDbForPlanTests(t)
+	defer db.Close()
+	subscription, err := db.CreateSubscription(ctx, Subscription{
+		CustomerID: uuid.MustParse("00000000-0000-0000-0000-000000000003"),
+		PlanID:     uuid.MustParse("11111111-1111-1111-1111-111111111111"),
+		StartDate:  time.Now(),
+		EndDate:    time.Now().Add(30 * 24 * time.Hour),
+		Status:     "ACTIVE",
+		AutoRenew:  true,
+	})
+	if err != nil {
+		t.Fatalf("Failed to create subscription: %v", err)
+	}
+	t.Logf("Successfully created subscription with ID: %s", subscription.ID)
+}
+func TestCreateSubscriptionBadPlan(t *testing.T) {
+	ctx, db := createDbForPlanTests(t)
+	defer db.Close()
+	subscription, err := db.CreateSubscription(ctx, Subscription{
+		CustomerID: uuid.MustParse("00000000-0000-0000-0000-000000000003"),
+		PlanID:     uuid.MustParse("00000000-0000-0000-0000-000000000001"),
+		StartDate:  time.Now(),
+		EndDate:    time.Now().Add(30 * 24 * time.Hour),
+		Status:     "ACTIVE",
+		AutoRenew:  true,
+	})
+	if err == nil {
+		t.Fatalf("Expected failure when creating subscription with bad plan ID, but got success: %v", subscription)
+	}
 }

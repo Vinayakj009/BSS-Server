@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -62,4 +63,28 @@ func (db *DB) GetActiveSubscriptionByUserId(ctx context.Context, userId string) 
 			  WHERE customer_id = $1 AND status = 'ACTIVE'`
 	row := db.Pool.QueryRow(ctx, query, userId)
 	return scanSubscription(row)
+}
+
+func (db *DB) CreateSubscription(ctx context.Context, subscription Subscription) (Subscription, error) {
+	query := `
+		INSERT INTO subscriptions (customer_id, plan_id, start_date, end_date, status, auto_renew, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		RETURNING id
+	`
+	var id uuid.UUID
+	err := db.Pool.QueryRow(ctx, query,
+		subscription.CustomerID,
+		subscription.PlanID,
+		subscription.StartDate,
+		subscription.EndDate,
+		subscription.Status,
+		subscription.AutoRenew,
+		subscription.CreatedAt,
+		subscription.UpdatedAt,
+	).Scan(&id)
+	if err != nil {
+		return Subscription{}, err
+	}
+	subscription.ID = id
+	return subscription, nil
 }
