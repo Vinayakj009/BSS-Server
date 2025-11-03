@@ -127,7 +127,7 @@ Customer ───< CustomerSubscription >─── Plan
 | active                  | BOOLEAN     | status flag            |
 | created_at / updated_at | timestamptz | audit fields           |
 
-**customer_subscriptions**
+**subscriptions**
 | Column                  | Type        | Notes                      |
 | ----------------------- | ----------- | -------------------------- |
 | id                      | UUID (PK)   | generated                  |
