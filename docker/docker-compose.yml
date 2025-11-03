@@ -52,10 +52,10 @@ services:
       - bss-network
 
   bss-server:
-    image: golang:1.24-alpine
-    volumes:
-      - ../:/app/
-    working_dir: /app
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/BSS
+    container_name: bss-server
     depends_on:
       - postgres
       - redis
@@ -73,7 +73,6 @@ services:
       KAFKA_BROKER: kafka:29092
     networks:
       - bss-network
-    command: sh -c "go run ./src/cmd/bss/main.go"
 
 networks:
   bss-network:

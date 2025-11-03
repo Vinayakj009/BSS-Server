@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"bss/src/server"
+	"fmt"
+	"os"
+)
 
 func main() {
-	fmt.Println("Hello, BSS!")
+	server := server.NewServer()
+	addr := ":" + os.Getenv("APP_PORT")
+	fmt.Println("Starting BSS Server... on port", addr)
+	if err := server.Start(addr); err != nil {
+		panic(err)
+	}
 }
