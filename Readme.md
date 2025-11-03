@@ -1,6 +1,10 @@
 # BSS
 This is a test submission code, and includes a deployable golang based plan subscription and management code.
 
+# HLD
+The high level design of the service has been mentioned in [HLD.md](https://github.com/Vinayakj009/BSS-Server/blob/master/HLD.md).
+It is possible that I may not have implemented everything mentioned there. Once I do, I will update the status here.
+
 # How to run
 To run this code, you need to have docker install. Then just run the following command to starup the server and all it's dependencies.
 
