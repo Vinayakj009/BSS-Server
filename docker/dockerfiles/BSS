@@ -1,0 +1,57 @@
+FROM golang:1.24-alpine AS builder
+
+WORKDIR /app
+
+# Install build dependencies
+RUN apk add --no-cache git ca-certificates tzdata
+
+# Copy go mod files
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN go build -o main ./src/cmd/bss/main.go
+
+# Final stage
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates tzdata
+
+WORKDIR /root/
+
+# Copy binary from builder
+COPY --from=builder /app/main .
+
+# Environment variables for Postgres
+ENV POSTGRES_HOST=postgres
+ENV POSTGRES_PORT=5432
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_DB=bss
+ENV POSTGRES_SSLMODE=disable
+
+# Environment variables for Kafka
+ENV KAFKA_BROKERS=kafka_broker:9092
+ENV KAFKA_GROUP_ID=bss-consumer-group
+ENV KAFKA_TOPIC=bss-events
+
+# Environment variables for Redis
+ENV REDIS_HOST=redis
+ENV REDIS_PORT=6379
+ENV REDIS_PASSWORD=
+ENV REDIS_DB=0
+
+# Environment variables for Prometheus
+ENV PROMETHEUS_PORT=9090
+ENV METRICS_PORT=2112
+
+# Application port
+ENV APP_PORT=8080
+
+EXPOSE $METRICS_PORT $METRICS_PORT
+EXPOSE $APP_PORT $APP_PORT
+
+CMD ["./main"]
