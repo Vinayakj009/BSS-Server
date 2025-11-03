@@ -32,28 +32,28 @@ This service is a core component of the Business Support System (BSS) and demons
 ### 2.2 Diagram (Text Representation)
 
 ```
-      ┌──────────────────────────┐
-      │   Client (BSS UI / API)  │
-      └────────────┬─────────────┘
-                   │
-          REST over HTTP (JSON)
-                   │
-     ┌─────────────┴─────────────────┐
-     │  Plan Management Microservice │
-     │  ───────────────────────────  │
-     │  • API Layer (chi)            │
-     │  • Service Layer              │
-     │  • Repository Layer (pgx)     │
-     │  • Kafka Producer/Consumer    │
-     │  • Prometheus + OpenTelemetry │
-     └──────────────┬────────────────┘
-                    │
-  ┌─────────────────┼───────────────────┐
-  │                 │                   │
-┌─────────────┐┌─────────────┐┌────────────────┐
-│ PostgreSQL  ││ Kafka Broker││ Downstream Svc │
-│ (State)     ││ (Events)    ││ Billing, Inv.  │
-└─────────────┘└─────────────┘└────────────────┘
+                                            ┌──────────────────────────┐
+                                            │   Client (BSS UI / API)  │
+                                            └────────────┬─────────────┘
+                                                         │
+                                                REST over HTTP (JSON)
+                                                         │
+                                           ┌─────────────┴─────────────────┐
+                                           │  Plan Management Microservice │
+                                           │  ───────────────────────────  │
+                                           │  • API Layer (chi)            │
+                                           │  • Service Layer              │
+                                           │  • Repository Layer (pgx)     │
+                                           │  • Kafka Producer/Consumer    │
+                                           │  • Prometheus + OpenTelemetry │
+                                           └──────────────┬────────────────┘
+                                                          │
+                                        ┌─────────────────┼───────────────────┐
+                                        │                 │                   │
+                                      ┌─────────────┐┌─────────────┐┌────────────────┐
+                                      │ PostgreSQL  ││ Kafka Broker││ Downstream Svc │
+                                      │ (State)     ││ (Events)    ││ Billing, Inv.  │
+                                      └─────────────┘└─────────────┘└────────────────┘
 ```
 
 
