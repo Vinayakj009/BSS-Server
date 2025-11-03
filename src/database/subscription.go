@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -87,4 +88,20 @@ func (db *DB) CreateSubscription(ctx context.Context, subscription Subscription)
 	}
 	subscription.ID = id
 	return subscription, nil
+}
+
+func (db *DB) CancelSubscription(ctx context.Context, subscriptionId string) error {
+	query := `
+		UPDATE subscriptions
+		SET status = 'CANCELLED', updated_at = NOW()
+		WHERE id = $1 and status = 'ACTIVE'
+	`
+	result, err := db.Pool.Exec(ctx, query, subscriptionId)
+	if err != nil {
+		return err
+	}
+	if result.RowsAffected() == 0 {
+		return errors.New("no matching row found")
+	}
+	return nil
 }
