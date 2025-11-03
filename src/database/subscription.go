@@ -27,3 +27,11 @@ func (db *DB) GetSubscriptionByUserId(ctx context.Context, userId string) (Subsc
 	row := db.Pool.QueryRow(ctx, query, userId)
 	return scanSubscription(row)
 }
+
+func (db *DB) GetActiveSubscriptionByUserId(ctx context.Context, userId string) (Subscription, error) {
+	query := `SELECT * 
+			  FROM subscriptions 
+			  WHERE customer_id = $1 AND status = 'ACTIVE'`
+	row := db.Pool.QueryRow(ctx, query, userId)
+	return scanSubscription(row)
+}

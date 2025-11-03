@@ -50,6 +50,17 @@ VALUES (
     'ACTIVE',
     true
 );
+-- Insert sample subscription
+INSERT INTO subscriptions (id, customer_id, plan_id, start_date, end_date, status, auto_renew)
+VALUES (
+    gen_random_uuid(),
+    '00000000-0000-0000-0000-000000000001',
+    '11111111-1111-1111-1111-111111111111',
+    NOW(),
+    NOW() + INTERVAL '30 days',
+    'EXPIRED',
+    true
+);
 
 -- Events table
 CREATE TABLE IF NOT EXISTS events (
